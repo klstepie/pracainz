@@ -25,7 +25,7 @@ USE PracaDyplomowa
 CREATE TABLE Dzialy(
 	ID_Dzial char(3) NOT NULL PRIMARY KEY,
 	Nazwa varchar(30) NOT NULL,
-	Opis text NULL,
+	Opis text NULL
   )
 
 -- Tabela pracownicy
