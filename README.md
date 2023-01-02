@@ -1,9 +1,9 @@
 # Praca inżynierska
-<br/>
+
 # Temat pracy
-<br/>
-Projekt i implementacja relacyjno-dokumentowej bazy danych obsługującej proces rezerwacji usług hotelarsko-turystycznych i dodatkowych w obiekcie hotelowym.
-<br/>
+
+<p>Projekt i implementacja relacyjno-dokumentowej bazy danych obsługującej proces rezerwacji usług hotelarsko-turystycznych i dodatkowych w obiekcie hotelowym.
+</p>
 # Promotor/promotor pomocniczy
 
 # Autor
