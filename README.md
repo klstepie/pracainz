@@ -8,17 +8,17 @@
 
 <p>dr inż. Marek Valenta, mgr Grzegorz Stolecki</p>
 
-# Autor
+<h2>Autor</h2>
 
 <p>Klaudia Stępień</p>
 
-# Wyższa Szkoła Zarządzania i Bankowości w Krakowie
+<h2>Wyższa Szkoła Zarządzania i Bankowości w Krakowie</h2>
 
 <p>Wydział Nauk Stosowanych
 KIERUNEK: Informatyka
 SPECJALNOŚĆ: Bazy danych
 </p>
 
-# Rok akademicki
+<h2> Rok akademicki </h2>
 
 <p>2021/2022</p>
