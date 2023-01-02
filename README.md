@@ -14,10 +14,11 @@
 
 <h2>Wyższa Szkoła Zarządzania i Bankowości w Krakowie</h2>
 
-<p>Wydział Nauk Stosowanych
-KIERUNEK: Informatyka
-SPECJALNOŚĆ: Bazy danych
-</p>
+<p>Wydział Nauk Stosowanych</p>
+<br/>
+<p>Kierunek: Informatyka</p>
+<br/>
+<p>Specjalność: Bazy danych</p>
 
 <h2> Rok akademicki </h2>
 
