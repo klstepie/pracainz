@@ -5,7 +5,7 @@
 <p>Projekt i implementacja relacyjno-dokumentowej bazy danych obsługującej proces rezerwacji usług hotelarsko-turystycznych i dodatkowych w obiekcie hotelowym.
 </p>
 
-# Promotor/promotor pomocniczy
+# <h2>Promotor/promotor pomocniczy</h2>
 
 <p>dr inż. Marek Valenta, mgr Grzegorz Stolecki</p>
 
