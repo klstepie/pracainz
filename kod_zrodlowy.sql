@@ -336,7 +336,7 @@ CREATE TABLE TypyRaportow(
 )
 GO
 
--- Tanela raporty USALI
+-- Tabela raporty USALI
 
 CREATE TABLE RaportyUSALI(
 	ID_Raport int IDENTITY(1,1) NOT NULL,
@@ -353,6 +353,168 @@ REFERENCES TypyRaportow (ID_TypRaportu)
 GO
 
 
+-- WIDOKI
+
+-- Wolne pokoje
+
+CREATE VIEW v_WolnePokoje AS
+SELECT P.ID_Pokoj, P.Pietro,tp.Typ,P.NrPokoju,sp.StatusPokoju
+FROM Pokoje AS P
+JOIN TypyPokoi AS tp
+ON tp.ID_TypPokoju = P.ID_TypPokoju
+JOIN StatusyPokoju AS sp
+ON sp.ID_StatusPokoju = P.ID_StatusPokoju
+WHERE sp.ID_StatusPokoju = 1 OR sp.ID_StatusPokoju = 3
+GO
+
+-- Statusy pokoi
+
+CREATE VIEW v_StatusyPokoi
+AS
+SELECT P.ID_Pokoj, P.Pietro,tp.Typ,P.NrPokoju,sp.StatusPokoju
+FROM Pokoje AS P
+JOIN TypyPokoi AS tp
+ON tp.ID_TypPokoju = P.ID_TypPokoju
+JOIN StatusyPokoju AS sp
+ON sp.ID_StatusPokoju = P.ID_StatusPokoju
+
+-- Rezerwacje opłacone
+
+CREATE VIEW V_RezerwacjeOplacone AS 
+SELECT p.ID_Rezerwacja, g.Imie, g.Nazwisko,g.Ulica + ' ' + g.KodPocztowy + ' ' + g.Miasto AS Adres, 
+Po.NrPokoju, CONVERT(varchar,R.DataOd,105) AS 'Przyjazd', CONVERT(varchar,R.DataDo,105) AS 'Wyjazd',
+p.CalkowitaKwotaDoZaplaty, p.TerminPlatnosci, p.DataDokonaniaPlatnosci, m.Metoda
+FROM Platnosci AS p
+JOIN Rezerwacje AS r
+ON r.ID_Rezerwacja = p.ID_Rezerwacja
+JOIN Goscie AS G
+ON g.id_gosc = r.id_gosc
+JOIN PokojeRezerwacja AS PR
+ON PR.ID_Rezerwacja = r.ID_Rezerwacja
+JOIN Pokoje AS Po
+ON po.ID_Pokoj = PR.ID_Pokoj
+JOIN MetodyPlatnosci AS m
+ON m.ID_MetodaPlatnosci = p.ID_MetodaPlatnosci
+WHERE p.DataDokonaniaPlatnosci IS NOT NULL
+
+
+-- Rezerwacje niezapłacone
+
+CREATE VIEW v_RezerwacjeNiezaplacone AS
+SELECT p.ID_Rezerwacja, g.Imie, g.Nazwisko,g.Ulica + ' ' + g.KodPocztowy + ' ' + g.Miasto AS Adres, 
+Po.NrPokoju, CONVERT(varchar,R.DataOd,105) AS 'Przyjazd', CONVERT(varchar,R.DataDo,105) AS 'Wyjazd',
+p.CalkowitaKwotaDoZaplaty, p.TerminPlatnosci, p.DataDokonaniaPlatnosci
+FROM Platnosci AS p
+JOIN Rezerwacje AS r
+ON r.ID_Rezerwacja = p.ID_Rezerwacja
+JOIN Goscie AS G
+ON g.id_gosc = r.id_gosc
+JOIN PokojeRezerwacja AS PR
+ON PR.ID_Rezerwacja = r.ID_Rezerwacja
+JOIN Pokoje AS Po
+ON po.ID_Pokoj = PR.ID_Pokoj
+WHERE p.DataDokonaniaPlatnosci IS NULL
+GO
+
+-- Pracownicy i ich stanowiska
+
+CREATE VIEW 
+v_PracownicyStanowiska
+AS
+SELECT ID_Pracownik,Imie,Nazwisko,Stanowisko
+FROM Pracownicy
+GO
+
+-- Pracownicy i usługi, do których są przypisani
+
+CREATE VIEW v_PracownicyRezerwacjaUslug
+AS
+SELECT P.ID_Pracownik, P.Imie + ' ' + P.Nazwisko AS 'Imie i nazwisko pracownika', 
+P.Stanowisko, U.Nazwa AS 'Nazwa wykonywanej uslugi', 
+CONVERT(varchar,RU.DataRozpoczecia,105) AS 'Data rozpoczecia', 
+CONVERT(varchar,RU.DataRozpoczecia,8) AS 'Godzina rozpoczecia',
+CONVERT(varchar,RU.DataZakonczenia,105) AS 'Data zakonczenia',
+CONVERT(varchar,RU.DataZakonczenia,8) AS 'Godzina zakonczenia',
+G.ID_Gosc,
+G.Imie + ' ' + G.Nazwisko AS 'Imie i nazwisko goscia'
+FROM Pracownicy AS P
+JOIN RezerwacjaUslug AS RU
+ON P.ID_Pracownik = RU.ID_Pracownik
+JOIN Uslugi AS U
+ON RU.ID_Usluga = U.ID_Usluga
+JOIN Rezerwacje AS R
+ON RU.ID_Rezerwacja = R.ID_Rezerwacja
+JOIN Goscie AS G
+ON G.ID_Gosc = R.ID_Rezerwacja
+GO
+
+-- Pokoje, które trzeba posprzątać
+
+CREATE VIEW v_PokojeDoSprzatania AS
+SELECT P.ID_Pokoj, P.Pietro,tp.Typ,P.NrPokoju,sp.StatusPokoju
+FROM Pokoje AS P
+JOIN TypyPokoi AS tp
+ON tp.ID_TypPokoju = P.ID_TypPokoju
+JOIN StatusyPokoju AS sp
+ON sp.ID_StatusPokoju = P.ID_StatusPokoju
+WHERE sp.ID_StatusPokoju = 4 OR sp.ID_StatusPokoju = 3
+GO
+
+-- Lista przyjazdów i wyjazdów
+
+CREATE VIEW v_ListaPrzyjazdowiWyjazdow
+AS
+SELECT R.ID_Rezerwacja,G.Imie, G.Nazwisko, P.Pietro, P.NrPokoju,
+CONVERT(varchar,R.DataOd,105) as 'Przyjazd', 
+CONVERT(varchar,R.DataDo,105) as 'Wyjazd'
+FROM Pokoje AS P
+JOIN TypyPokoi AS TP
+ON P.ID_TypPokoju = TP.ID_TypPokoju
+JOIN PokojeRezerwacja AS PR
+ON PR.ID_Pokoj = P.ID_Pokoj
+JOIN Rezerwacje AS R
+ON R.ID_Rezerwacja = PR.ID_Rezerwacja
+JOIN Goscie AS G
+ON G.ID_Gosc = R.ID_Gosc
+WHERE R.DataOd >= CAST(GETDATE() AS date)
+GO
+
+-- Koszt pobytu (widok pomocniczy)
+
+CREATE VIEW v_KosztPobytu
+AS
+SELECT R.ID_Rezerwacja,SUM(TP.Cena * CONVERT(int,DATEDIFF(DAY,R.DataOD,R.DataDo))) AS SUMA
+FROM Pokoje AS P
+JOIN TypyPokoi AS TP
+ON TP.ID_TypPokoju = P.ID_TypPokoju
+JOIN PokojeRezerwacja AS PR
+ON PR.ID_Pokoj = P.ID_Pokoj
+JOIN Rezerwacje AS R
+ON R.ID_Rezerwacja = PR.ID_Rezerwacja
+GROUP BY R.ID_Rezerwacja
+GO
+
+-- Koszt usług (widok pomocniczy)
+
+CREATE VIEW v_KosztUslug AS
+SELECT
+RU.ID_Rezerwacja,RU.ID_Usluga,
+CASE
+WHEN U.JednostkaCzasu = 'D' THEN DATEDIFF(DAY,RU.DataRozpoczecia,RU.DataZakonczenia) * U.Cena
+WHEN U.JednostkaCzasu = 'H' THEN DATEDIFF(HOUR,RU.DataRozpoczecia,RU.DataZakonczenia) * U.Cena
+END AS KwotaDoZaplaty
+FROM RezerwacjaUslug RU
+JOIN Uslugi U
+ON U.Id_Usluga = RU.Id_Usluga
+GO
+
+-- Obliczanie wartości usług na rezerwacje (widok pomocniczy)
+
+CREATE VIEW v_SumaUslugNaRezerwacje
+AS
+SELECT ID_Rezerwacja, ID_Usluga, SUM(KwotaDoZaplaty) AS SumaUslug 
+FROM v_KosztUslug
+GROUP BY ID_Rezerwacja, ID_Usluga
 
 
 
