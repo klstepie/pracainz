@@ -215,7 +215,6 @@ CREATE TABLE MetodyPlatnosci(
 )
 GO
 
-
 -- Tabela płatności
 
 CREATE TABLE Platnosci(
@@ -264,120 +263,96 @@ GO
 
 -- Tabela rezerwacja usług
 
-CREATE TABLE [dbo].[RezerwacjaUslug](
-	[ID_Rezerwacja] [int] NOT NULL,
-	[ID_Usluga] [int] NOT NULL,
-	[DataRozpoczecia] [smalldatetime] NOT NULL,
-	[ID_Pracownik] [int] NOT NULL,
-	[Opis] [text] NULL,
-	[DataZakonczenia] [smalldatetime] NOT NULL,
-	[ID_RezerwacjaUslugi] [int] IDENTITY(1,1) NOT NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[ID_RezerwacjaUslugi] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+CREATE TABLE RezerwacjaUslug(
+	ID_Rezerwacja int NOT NULL,
+	ID_Usluga int NOT NULL,
+	DataRozpoczecia smalldatetime NOT NULL,
+	ID_Pracownik int NOT NULL,
+	Opis text NULL,
+	DataZakonczenia smalldatetime NOT NULL,
+	ID_RezerwacjaUslugi int IDENTITY(1,1) NOT NULL,
+CONSTRAINT PK_RezerwacjaUslug PRIMARY KEY (ID_RezerwacjaUslugi)
+)
+
+ALTER TABLE RezerwacjaUslug 
+ADD  CONSTRAINT FK_RezerwacjaUslug_Pracownicy FOREIGN KEY(ID_Pracownik)
+REFERENCES Pracownicy (ID_Pracownik)
 GO
 
-ALTER TABLE [dbo].[RezerwacjaUslug]  WITH CHECK ADD  CONSTRAINT [FK_RezerwacjaUslug_Pracownicy] FOREIGN KEY([ID_Pracownik])
-REFERENCES [dbo].[Pracownicy] ([ID_Pracownik])
+ALTER TABLE RezerwacjaUslug  
+ADD  CONSTRAINT FK_RezerwacjaUslug_Rezerwacje FOREIGN KEY(ID_Rezerwacja)
+REFERENCES Rezerwacje (ID_Rezerwacja)
 GO
 
-ALTER TABLE [dbo].[RezerwacjaUslug] CHECK CONSTRAINT [FK_RezerwacjaUslug_Pracownicy]
+ALTER TABLE RezerwacjaUslug  
+ADD  CONSTRAINT FK_RezerwacjaUslug_Uslugi FOREIGN KEY(ID_Usluga)
+REFERENCES Uslugi (ID_Usluga)
 GO
 
-ALTER TABLE [dbo].[RezerwacjaUslug]  WITH CHECK ADD  CONSTRAINT [FK_RezerwacjaUslug_Rezerwacje] FOREIGN KEY([ID_Rezerwacja])
-REFERENCES [dbo].[Rezerwacje] ([ID_Rezerwacja])
+ALTER TABLE RezerwacjaUslug
+ADD CHECK  ((DataRozpoczecia<DataZakonczenia))
 GO
 
-ALTER TABLE [dbo].[RezerwacjaUslug] CHECK CONSTRAINT [FK_RezerwacjaUslug_Rezerwacje]
+-- Tabela typy wydatków
+
+CREATE TABLE TypyWydatkow(
+	ID_KodWydatku char(4) NOT NULL,
+	Nazwa varchar(30) NOT NULL,
+	Opis text NULL,
+ CONSTRAINT PK_ID_KodWydatku PRIMARY KEY (ID_KodWydatku)
+)
 GO
 
-ALTER TABLE [dbo].[RezerwacjaUslug]  WITH CHECK ADD  CONSTRAINT [FK_RezerwacjaUslug_Uslugi] FOREIGN KEY([ID_Usluga])
-REFERENCES [dbo].[Uslugi] ([ID_Usluga])
+-- Tabela wydatki
+
+CREATE TABLE Wydatki(
+	ID_Wydatek int IDENTITY(1,1) NOT NULL,
+	ID_Dzial char(3) NOT NULL,
+	ID_KodWydatku char(4) NOT NULL,
+	Kwota float NOT NULL,
+	DataZakupu smalldatetime NOT NULL,
+	InformacjeDodatkowe text NULL,
+ CONSTRAINT PK_Wydatek PRIMARY KEY (ID_Wydatek)
+)
 GO
 
-ALTER TABLE [dbo].[RezerwacjaUslug] CHECK CONSTRAINT [FK_RezerwacjaUslug_Uslugi]
+ALTER TABLE Wydatki
+ADD  CONSTRAINT FK_Wydatki_Dzial FOREIGN KEY(ID_Dzial)
+REFERENCES Dzialy (ID_Dzial)
 GO
 
-ALTER TABLE [dbo].[RezerwacjaUslug]  WITH CHECK ADD CHECK  (([DataRozpoczecia]<[DataZakonczenia]))
+ALTER TABLE Wydatki
+ADD  CONSTRAINT FK_Wydatki_TypyWydatkow FOREIGN KEY(ID_KodWydatku)
+REFERENCES TypyWydatkow (ID_KodWydatku)
 GO
 
--- Typy wydatków
+-- Tabela typy raportów
 
-CREATE TABLE [dbo].[TypyWydatkow](
-	[ID_KodWydatku] [char](4) NOT NULL,
-	[Nazwa] [varchar](30) NOT NULL,
-	[Opis] [text] NULL,
- CONSTRAINT [PK_ID_KodWydatku] PRIMARY KEY CLUSTERED 
-(
-	[ID_KodWydatku] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+CREATE TABLE TypyRaportow(
+	ID_TypRaportu char(2) NOT NULL,
+	Nazwa varchar(20) NOT NULL,
+	Opis text NULL,
+ CONSTRAINT PK_TypyRaportow PRIMARY KEY (ID_TypRaportu) 
+)
 GO
 
--- Wydatki
+-- Tanela raporty USALI
 
-CREATE TABLE [dbo].[Wydatki](
-	[ID_Wydatek] [int] IDENTITY(1,1) NOT NULL,
-	[ID_Dzial] [char](3) NOT NULL,
-	[ID_KodWydatku] [char](4) NOT NULL,
-	[Kwota] [float] NOT NULL,
-	[DataZakupu] [smalldatetime] NOT NULL,
-	[InformacjeDodatkowe] [text] NULL,
- CONSTRAINT [PK_Wydatek] PRIMARY KEY CLUSTERED 
-(
-	[ID_Wydatek] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+CREATE TABLE RaportyUSALI(
+	ID_Raport int IDENTITY(1,1) NOT NULL,
+	ID_TypRaportu char(2) NOT NULL,
+	Raport xml NOT NULL,
+	DataRaportu smalldatetime NOT NULL,
+ CONSTRAINT PK_RaportyUsali PRIMARY KEY (ID_Raport)
+)
 GO
 
-ALTER TABLE [dbo].[Wydatki]  WITH CHECK ADD  CONSTRAINT [FK_Wydatki_Dzial] FOREIGN KEY([ID_Dzial])
-REFERENCES [dbo].[Dzialy] ([ID_Dzial])
+ALTER TABLE RaportyUSALI 
+ADD  CONSTRAINT FK_RaportyUsali_TypyRaportow FOREIGN KEY(ID_TypRaportu)
+REFERENCES TypyRaportow (ID_TypRaportu)
 GO
 
-ALTER TABLE [dbo].[Wydatki] CHECK CONSTRAINT [FK_Wydatki_Dzial]
-GO
 
-ALTER TABLE [dbo].[Wydatki]  WITH CHECK ADD  CONSTRAINT [FK_Wydatki_TypyWydatkow] FOREIGN KEY([ID_KodWydatku])
-REFERENCES [dbo].[TypyWydatkow] ([ID_KodWydatku])
-GO
-
-ALTER TABLE [dbo].[Wydatki] CHECK CONSTRAINT [FK_Wydatki_TypyWydatkow]
-
--- Typy raportów
-
-CREATE TABLE [dbo].[TypyRaportow](
-	[ID_TypRaportu] [char](2) NOT NULL,
-	[Nazwa] [varchar](20) NOT NULL,
-	[Opis] [text] NULL,
- CONSTRAINT [PK_TypyRaportow] PRIMARY KEY CLUSTERED 
-(
-	[ID_TypRaportu] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-
--- Raporty USALI
-
-CREATE TABLE [dbo].[RaportyUSALI](
-	[ID_Raport] [int] IDENTITY(1,1) NOT NULL,
-	[ID_TypRaportu] [char](2) NOT NULL,
-	[Raport] [xml] NOT NULL,
-	[DataRaportu] [smalldatetime] NOT NULL,
- CONSTRAINT [PK_RaportyUsali] PRIMARY KEY CLUSTERED 
-(
-	[ID_Raport] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-
-ALTER TABLE [dbo].[RaportyUSALI]  WITH CHECK ADD  CONSTRAINT [FK_RaportyUsali_TypyRaportow] FOREIGN KEY([ID_TypRaportu])
-REFERENCES [dbo].[TypyRaportow] ([ID_TypRaportu])
-GO
-
-ALTER TABLE [dbo].[RaportyUSALI] CHECK CONSTRAINT [FK_RaportyUsali_TypyRaportow]
-GO
 
 
 
