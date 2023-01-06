@@ -207,8 +207,54 @@ VALUES (5, 7, CAST(N'2023-05-04T13:30:00' AS SmallDateTime), 5, NULL, CAST(N'202
 (17, 2, CAST(N'2022-10-09T18:00:00' AS SmallDateTime), 4, NULL, CAST(N'2022-10-09T21:00:00' AS SmallDateTime), 20)
 SET IDENTITY_INSERT [dbo].[RezerwacjaUslug] OFF
 
+-- Tabela typy raportów
 
---
+INSERT TypyRaportow
+VALUES (N'U1', N'Pokoje', N'Schemat ma na celu odzwierciedlenie minimalnego standardu raportowania.'),
+(N'U2', N'Spa&Wellnes', N'Schemat ma na celu odzwierciedlenie minimalnego standardu raportowania.')
+
+-- Tabela raportów USALI
+
+SET IDENTITY_INSERT [dbo].[RaportyUSALI] ON 
+INSERT [dbo].[RaportyUSALI] ([ID_Raport], [ID_TypRaportu], [Raport], [DataRaportu]) 
+VALUES (1, N'U1', N'<Pokoje><WskaznikWykorzystaniaPokoi>0.27</WskaznikWykorzystaniaPokoi><LiczbaPokoi>16</LiczbaPokoi><SredniaCenaPokoju>552.44</SredniaCenaPokoju><RevPar>151.35</RevPar><CalkowityDochod>8839.00</CalkowityDochod><Wydatki><SrodkiCzystosci>600.00</SrodkiCzystosci><PoscielReczniki>1200.00</PoscielReczniki><PralniaSuszarnia>400.00</PralniaSuszarnia><UslugiKomplementarne>500.00</UslugiKomplementarne><SumaWydatkow>2700.00</SumaWydatkow></Wydatki><Zysk>6139.00</Zysk></Pokoje>', CAST(N'2022-09-15T19:00:00' AS SmallDateTime)),
+(2, N'U1', N'<Pokoje><WskaznikWykorzystaniaPokoi>0.27</WskaznikWykorzystaniaPokoi><LiczbaPokoi>16</LiczbaPokoi><SredniaCenaPokoju>552.44</SredniaCenaPokoju><RevPar>151.35</RevPar><CalkowityDochod>8839.00</CalkowityDochod><Wydatki><SrodkiCzystosci>600.00</SrodkiCzystosci><PoscielReczniki>1200.00</PoscielReczniki><PralniaSuszarnia>400.00</PralniaSuszarnia><UslugiKomplementarne>500.00</UslugiKomplementarne><SumaWydatkow>2700.00</SumaWydatkow></Wydatki><Zysk>6139.00</Zysk></Pokoje>', CAST(N'2022-09-17T18:04:00' AS SmallDateTime)),
+(3, N'U2', N'<SpaIWellness><Dochod><Basen>0.00</Basen><PielegnacjaSkory>0.00</PielegnacjaSkory><ZabiegiNaCialo>1734.00</ZabiegiNaCialo><CalkowityDochod>1734.00</CalkowityDochod></Dochod><Wydatki><SrodkiCzystosci>1100.00</SrodkiCzystosci><PoscielReczniki>890.00</PoscielReczniki><PralniaSuszarnia>600.00</PralniaSuszarnia><UslugiKomplementarne>500.00</UslugiKomplementarne><UtrzymanieBasenu>2000.00</UtrzymanieBasenu><Kosmetyki>800.00</Kosmetyki><SumaWydatkow>5890.00</SumaWydatkow></Wydatki><Zysk>-4156.00</Zysk></SpaIWellness>', CAST(N'2022-09-18T18:17:00' AS SmallDateTime)),
+(4, N'U1', N'<Pokoje><WskaznikWykorzystaniaPokoi>0.31</WskaznikWykorzystaniaPokoi><LiczbaPokoi>16</LiczbaPokoi><SredniaCenaPokoju>540.94</SredniaCenaPokoju><RevPar>166.73</RevPar><CalkowityDochod>9737.00</CalkowityDochod><Wydatki><SrodkiCzystosci>600.00</SrodkiCzystosci><PoscielReczniki>1200.00</PoscielReczniki><PralniaSuszarnia>400.00</PralniaSuszarnia><UslugiKomplementarne>500.00</UslugiKomplementarne><SumaWydatkow>2700.00</SumaWydatkow></Wydatki><Zysk>7037.00</Zysk></Pokoje>', CAST(N'2022-10-04T13:30:00' AS SmallDateTime)),
+(5, N'U1', N'<Pokoje><WskaznikWykorzystaniaPokoi>0.31</WskaznikWykorzystaniaPokoi><LiczbaPokoi>16</LiczbaPokoi><SredniaCenaPokoju>540.94</SredniaCenaPokoju><RevPar>166.73</RevPar><CalkowityDochod>9737.00</CalkowityDochod><Wydatki><SrodkiCzystosci>900.00</SrodkiCzystosci><PoscielReczniki>1200.00</PoscielReczniki><PralniaSuszarnia>400.00</PralniaSuszarnia><UslugiKomplementarne>500.00</UslugiKomplementarne><SumaWydatkow>3000.00</SumaWydatkow></Wydatki><Zysk>6737.00</Zysk></Pokoje>', CAST(N'2022-10-04T13:42:00' AS SmallDateTime)),
+(6, N'U2', N'<SpaIWellness><Dochod><Basen>4250.00</Basen><PielegnacjaSkory>0.00</PielegnacjaSkory><ZabiegiNaCialo>17629.00</ZabiegiNaCialo><CalkowityDochod>21879.00</CalkowityDochod></Dochod><Wydatki><SrodkiCzystosci>1100.00</SrodkiCzystosci><PoscielReczniki>890.00</PoscielReczniki><PralniaSuszarnia>600.00</PralniaSuszarnia><UslugiKomplementarne>500.00</UslugiKomplementarne><UtrzymanieBasenu>2000.00</UtrzymanieBasenu><Kosmetyki>800.00</Kosmetyki><SumaWydatkow>5890.00</SumaWydatkow></Wydatki><Zysk>15989.00</Zysk></SpaIWellness>', CAST(N'2022-10-04T15:42:00' AS SmallDateTime)),
+(7, N'U2', N'<SpaIWellness><Dochod><Basen>750.00</Basen><PielegnacjaSkory>0.00</PielegnacjaSkory><ZabiegiNaCialo>3468.00</ZabiegiNaCialo><CalkowityDochod>4218.00</CalkowityDochod></Dochod><Wydatki><SrodkiCzystosci>1100.00</SrodkiCzystosci><PoscielReczniki>890.00</PoscielReczniki><PralniaSuszarnia>600.00</PralniaSuszarnia><UslugiKomplementarne>500.00</UslugiKomplementarne><UtrzymanieBasenu>2000.00</UtrzymanieBasenu><Kosmetyki>800.00</Kosmetyki><SumaWydatkow>5890.00</SumaWydatkow></Wydatki><Zysk>-1672.00</Zysk></SpaIWellness>', CAST(N'2022-10-04T17:52:00' AS SmallDateTime)),
+(8, N'U1', N'<Pokoje><WskaznikWykorzystaniaPokoi>0.41</WskaznikWykorzystaniaPokoi><LiczbaPokoi>16</LiczbaPokoi><SredniaCenaPokoju>495.46</SredniaCenaPokoju><RevPar>203.61</RevPar><CalkowityDochod>11891.00</CalkowityDochod><Wydatki><SrodkiCzystosci>900.00</SrodkiCzystosci><PoscielReczniki>1200.00</PoscielReczniki><PralniaSuszarnia>400.00</PralniaSuszarnia><UslugiKomplementarne>500.00</UslugiKomplementarne><SumaWydatkow>3000.00</SumaWydatkow></Wydatki><Zysk>8891.00</Zysk></Pokoje>', CAST(N'2022-10-04T21:11:00' AS SmallDateTime))
+SET IDENTITY_INSERT [dbo].[RaportyUSALI] OFF
+GO
+
+-- Tabela typy wydatków
+
+INSERT TypyWydatkow
+VALUES (N'CS  ', N'Srodki czystosci', N'Srodki sluzace do sprzatania pomieszczen.'),
+(N'HABP', N'Produkty zdrowie/uroda', N'Produkty potrzebne do strefy SPA.'),
+(N'L   ', N'Posciel/Reczniki', N'Zakup pościeli i ręczników.'),
+(N'LADC', N'Pralnia/Suszarnia', N'Pranie recznikow i poscieli.'),
+(N'SAG ', N'Uslugi komplementarne/Prezenty', N'Wydatki na uslugi komplementarne.'),
+(N'SP  ', N'Basen', N'Utrzymanie oraz zaopatrzenie basenu.')
+
+-- Tabela wydatków 
+
+SET IDENTITY_INSERT [dbo].[Wydatki] ON 
+INSERT [dbo].[Wydatki] ([ID_Wydatek], [ID_Dzial], [ID_KodWydatku], [Kwota], [DataZakupu], [InformacjeDodatkowe]) 
+VALUES (1, N'SP1', N'CS  ', 600, CAST(N'2022-08-01T00:00:00' AS SmallDateTime), NULL),
+(2, N'SP1', N'L   ', 1200, CAST(N'2022-08-01T00:00:00' AS SmallDateTime), NULL),
+(3, N'SP1', N'LADC', 400, CAST(N'2022-08-01T00:00:00' AS SmallDateTime), NULL),
+(4, N'SP1', N'SAG ', 500, CAST(N'2022-08-01T00:00:00' AS SmallDateTime), NULL),
+(5, N'UD1', N'CS  ', 1100, CAST(N'2022-08-01T00:00:00' AS SmallDateTime), NULL),
+(6, N'UD1', N'L   ', 890, CAST(N'2022-08-01T00:00:00' AS SmallDateTime), NULL),
+(7, N'UD1', N'LADC', 600, CAST(N'2022-08-01T00:00:00' AS SmallDateTime), NULL),
+(8, N'UD1', N'SAG ', 500, CAST(N'2022-08-01T00:00:00' AS SmallDateTime), NULL),
+(9, N'UD1', N'SP  ', 2000, CAST(N'2022-08-01T00:00:00' AS SmallDateTime), NULL),
+(10, N'UD1', N'HABP', 800, CAST(N'2022-08-01T00:00:00' AS SmallDateTime), NULL),
+(11, N'SP1', N'CS  ', 300, CAST(N'2022-09-01T00:00:00' AS SmallDateTime), N'Zakup środków do czyszczenia dywanów.')
+SET IDENTITY_INSERT [dbo].[Wydatki] OFF
+
 
 
 
