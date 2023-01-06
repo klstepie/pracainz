@@ -807,6 +807,7 @@ BEGIN
 	BEGIN
 	RAISERROR ('Nieprawidłowy nr rezerwacji.',16,1)
 	END
+	END
 GO
 -- Zameldowanie gościa
 
@@ -1384,6 +1385,8 @@ FOR XML PATH ('Pokoje'), ELEMENTS
 )
 INSERT INTO RaportyUSALI
 VALUES ('U1',@dokument,GETDATE())
+END
+GO
 
 -- Wygenerowanie raportu USALI (Spa&Wellness)
 
